@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Czf.Radiocom.Aggregation.Contracts;
+using Czf.Radiocom.Aggregation.Contracts.Values;
+using Czf.Radiocom.Aggregation.Entities;
+using Czf.Radiocom.Event.Repository.Contracts;
 
 namespace RadiocomDataAggregationEngine
 {
@@ -39,49 +43,15 @@ namespace RadiocomDataAggregationEngine
         }
     }
 
-    public interface IArtistTimeSeriesCache
-    {
-        Task StoreTimeSeriesValuesAsync(IEnumerable<ITimeSeriesValue> timeSeriesEvents, int artistId, TimeSeries timeSeries);
-    }
-
-    public interface ITimeSeriesEngine
-    {
-        IEnumerable<ITimeSeriesValue> ProcessTimeSeries(IEnumerable<ITimeSeriesEvent> events, TimeSeries timeSeries);
-    }
-
-    public interface ITimeSeriesValue
-    {
-        public DateTime Timestamp { get; set; }
-        public long Value { get; set; }
-    }
+    
 
 
-    public class ArtistEvent : ITimeSeriesEvent
-    {
-        public DateTime TimeStamp { get; set; }
+   
 
-    }
-
-    public interface ITimeSeriesEvent
-    {
-        DateTime TimeStamp { get; set; }
-    }
+    
   
 
-    public enum TimeSeries
-    {
-        None,
-        SevenDays,
-        ThreeMonths,
-        OneYear
-    }
+    
 
-    public interface IArtistEventsRepository
-    {
-
-        /// <summary>
-        /// Return events in ascending order by timestamp
-        /// </summary>
-        Task<IEnumerable<ArtistEvent>> GetEventsForTimeSeriesAsync(TimeSeries timeSeries, int artistId);
-    }
+    
 }

@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadiocomDataAggregationEngine", "RadiocomDataAggregationEngine\RadiocomDataAggregationEngine.csproj", "{6D944A18-15BD-492B-B198-C132DC1D21AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RadiocomDataAggregationEngine", "RadiocomDataAggregationEngine\RadiocomDataAggregationEngine.csproj", "{6D944A18-15BD-492B-B198-C132DC1D21AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Event.Repository", "Czf.Radiocom.Event.Repository\Czf.Radiocom.Event.Repository.csproj", "{D8600335-C91B-4C51-AF81-D9A89D8800A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.Contracts", "Czf.Radiocom.Aggregation.Contracts\Czf.Radiocom.Aggregation.Contracts.csproj", "{360D597E-342B-4A1C-B124-63A79E72244C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.Entities", "Czf.Radiocom.Aggregation.Entities\Czf.Radiocom.Aggregation.Entities.csproj", "{987E924D-303B-4B5C-956F-F9F783F26056}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B6D4F3D9-661B-4931-B055-7E7F0AE62F73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Tests", "Czf.Radiocom.Tests\Czf.Radiocom.Tests.csproj", "{13CF539B-4E91-42AA-92F0-C9D43846CE24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Aggregation.Cache", "Czf.Radiocom.Aggregation.Cache\Czf.Radiocom.Aggregation.Cache.csproj", "{9892F82E-9682-4FF1-949B-C6ADF637F9F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +27,32 @@ Global
 		{6D944A18-15BD-492B-B198-C132DC1D21AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D944A18-15BD-492B-B198-C132DC1D21AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D944A18-15BD-492B-B198-C132DC1D21AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8600335-C91B-4C51-AF81-D9A89D8800A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8600335-C91B-4C51-AF81-D9A89D8800A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8600335-C91B-4C51-AF81-D9A89D8800A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8600335-C91B-4C51-AF81-D9A89D8800A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{360D597E-342B-4A1C-B124-63A79E72244C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360D597E-342B-4A1C-B124-63A79E72244C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360D597E-342B-4A1C-B124-63A79E72244C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360D597E-342B-4A1C-B124-63A79E72244C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{987E924D-303B-4B5C-956F-F9F783F26056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987E924D-303B-4B5C-956F-F9F783F26056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987E924D-303B-4B5C-956F-F9F783F26056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987E924D-303B-4B5C-956F-F9F783F26056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13CF539B-4E91-42AA-92F0-C9D43846CE24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13CF539B-4E91-42AA-92F0-C9D43846CE24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13CF539B-4E91-42AA-92F0-C9D43846CE24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13CF539B-4E91-42AA-92F0-C9D43846CE24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{13CF539B-4E91-42AA-92F0-C9D43846CE24} = {B6D4F3D9-661B-4931-B055-7E7F0AE62F73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99BAC6E2-7E3B-4BC7-8C5C-4788B5533483}
