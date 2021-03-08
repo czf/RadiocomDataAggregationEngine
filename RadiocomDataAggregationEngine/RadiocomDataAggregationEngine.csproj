@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Czf.Radiocom.Aggregation.Contracts\Czf.Radiocom.Aggregation.Contracts.csproj" />
     <ProjectReference Include="..\Czf.Radiocom.Aggregation.Entities\Czf.Radiocom.Aggregation.Entities.csproj" />
     <ProjectReference Include="..\Czf.Radiocom.Event.Repository\Czf.Radiocom.Event.Repository.csproj" />
+    <ProjectReference Include="..\Czf.Radiocom.Repository\Czf.Radiocom.Repository.csproj" />
   </ItemGroup>
 
 </Project>

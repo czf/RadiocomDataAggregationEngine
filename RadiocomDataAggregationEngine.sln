@@ -13,9 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.En
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B6D4F3D9-661B-4931-B055-7E7F0AE62F73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Tests", "Czf.Radiocom.Tests\Czf.Radiocom.Tests.csproj", "{13CF539B-4E91-42AA-92F0-C9D43846CE24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Tests", "Czf.Radiocom.Tests\Czf.Radiocom.Tests.csproj", "{13CF539B-4E91-42AA-92F0-C9D43846CE24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Aggregation.Cache", "Czf.Radiocom.Aggregation.Cache\Czf.Radiocom.Aggregation.Cache.csproj", "{9892F82E-9682-4FF1-949B-C6ADF637F9F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.Cache", "Czf.Radiocom.Aggregation.Cache\Czf.Radiocom.Aggregation.Cache.csproj", "{9892F82E-9682-4FF1-949B-C6ADF637F9F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.App", "Czf.Radiocom.Aggregation.App\Czf.Radiocom.Aggregation.App.csproj", "{BADB5C70-B3E8-44B1-A816-B9BC1418F01F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Repository", "Czf.Radiocom.Repository\Czf.Radiocom.Repository.csproj", "{0CE874CE-09DB-4957-A0A3-29B09DF72D18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,14 @@ Global
 		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9892F82E-9682-4FF1-949B-C6ADF637F9F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BADB5C70-B3E8-44B1-A816-B9BC1418F01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BADB5C70-B3E8-44B1-A816-B9BC1418F01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BADB5C70-B3E8-44B1-A816-B9BC1418F01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BADB5C70-B3E8-44B1-A816-B9BC1418F01F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE874CE-09DB-4957-A0A3-29B09DF72D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE874CE-09DB-4957-A0A3-29B09DF72D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE874CE-09DB-4957-A0A3-29B09DF72D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE874CE-09DB-4957-A0A3-29B09DF72D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
