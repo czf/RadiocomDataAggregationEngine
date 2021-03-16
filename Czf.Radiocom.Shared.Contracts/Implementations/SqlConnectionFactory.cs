@@ -4,11 +4,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
-using Czf.Radiocom.Event.Repository.Contracts;
+using Czf.Radiocom.Shared.Contracts;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Options;
 
-namespace Czf.Radiocom.Event.Repository.Implementations
+namespace Czf.Radiocom.Shared.Implementations
 {
     public class SqlConnectionFactory : IDbConnectionFactory
     {

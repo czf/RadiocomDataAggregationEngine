@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Czf.Radiocom.Aggregation.Contracts.Values;
 using Czf.Radiocom.Aggregation.Entities;
 using Czf.Radiocom.Event.Repository.Contracts;
+using Czf.Radiocom.Shared.Contracts;
 using Dapper;
 using Microsoft.Extensions.Options;
 

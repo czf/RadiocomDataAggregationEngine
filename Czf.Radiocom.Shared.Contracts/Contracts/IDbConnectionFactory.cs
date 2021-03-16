@@ -4,7 +4,7 @@ using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Czf.Radiocom.Event.Repository.Contracts
+namespace Czf.Radiocom.Shared.Contracts
 {
     public interface IDbConnectionFactory
     {

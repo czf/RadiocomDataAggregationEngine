@@ -21,7 +21,7 @@ namespace Czf.Radiocom.Aggregation.App
         }
 
         [FunctionName("OnCompletedPopulateJobs")]
-        public async Task Run([QueueTrigger("czf.radiocom.collection")]string myQueueItem, ILogger log)
+        public async Task Run([QueueTrigger("czf-radiocom-collection")]string myQueueItem, ILogger log)
         {
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
 

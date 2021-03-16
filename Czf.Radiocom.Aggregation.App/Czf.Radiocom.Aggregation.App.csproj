@@ -2,8 +2,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <UserSecretsId>edc9266d-8515-43dd-94c5-44a4b7cb392d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.15.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
@@ -11,6 +13,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Czf.Radiocom.Aggregation.Cache\Czf.Radiocom.Aggregation.Cache.csproj" />
     <ProjectReference Include="..\Czf.Radiocom.Repository\Czf.Radiocom.Repository.csproj" />
     <ProjectReference Include="..\RadiocomDataAggregationEngine\RadiocomDataAggregationEngine.csproj" />
   </ItemGroup>

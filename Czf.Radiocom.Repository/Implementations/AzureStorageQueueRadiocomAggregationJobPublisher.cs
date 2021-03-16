@@ -33,7 +33,7 @@ namespace Czf.Radiocom.Repository.Implementations
         {
             try
             {
-                return _artistClient.SendMessageAsync(id.ToString());
+                return _artistClient.SendMessageAsync(Base64Encode(id.ToString()));
             }
             catch
             {
@@ -45,7 +45,7 @@ namespace Czf.Radiocom.Repository.Implementations
         {
             try
             {
-                return _artistWorkClient.SendMessageAsync(id.ToString());
+                return _artistWorkClient.SendMessageAsync(Base64Encode(id.ToString()));
             }
             catch
             {
@@ -58,6 +58,12 @@ namespace Czf.Radiocom.Repository.Implementations
             public const string AzureStorageQueueRadiocomAggregationJobPublisher = "AzureStorageQueueRadiocomAggregationJobPublisherOptions";
             public string ArtistQueueUri { get; set; }
             public string ArtistWorkQueueUri { get; set; }
+        }
+
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }

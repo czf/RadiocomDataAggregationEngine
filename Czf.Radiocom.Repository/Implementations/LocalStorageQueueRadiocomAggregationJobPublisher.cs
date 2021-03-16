@@ -43,6 +43,11 @@ namespace Czf.Radiocom.Repository.Implementations
                 return Task.CompletedTask;
             }
         }
-
+        //public class LocalStorageQueueRadiocomAggregationJobPublisherOptions
+        //{
+        //    public const string LocalStorageQueueRadiocomAggregationJobPublisher = "LocalStorageQueueRadiocomAggregationJobPublisherOptions";
+        //    public string ArtistQueueUri { get; set; }
+        //    public string ArtistWorkQueueUri { get; set; }
+        //}
     }
 }

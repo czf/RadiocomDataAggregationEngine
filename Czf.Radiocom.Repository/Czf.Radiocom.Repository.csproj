@@ -7,7 +7,12 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.3.0" />
     <PackageReference Include="Azure.Storage.Queues" Version="12.6.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.12" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Czf.Radiocom.Shared.Contracts\Czf.Radiocom.Shared.csproj" />
   </ItemGroup>
 
 </Project>
