@@ -14,9 +14,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RadiocomDataAggregationEngine;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistEventRepository;
-
+using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistWorkEventRepository;
 using static Czf.Radiocom.Repository.Implementations.AzureStorageQueueRadiocomAggregationJobPublisher;
 using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistRepository;
+using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistWorkRepository;
 using static Czf.Radiocom.Shared.Implementations.SqlConnectionFactory;
 //using Microsoft.Extensions.DependencyInjection; //microsoft.extensions.http
 
@@ -27,18 +28,27 @@ namespace Czf.Radiocom.Aggregation.App
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services//.AddLogging()
+            builder.Services //.AddLogging()
                 .AddOptions()
                 .AddSingleton<RadiocomCompletedCollectorInitiateJobsEngine>()
                 .AddSingleton<RadiocomDataArtistEventAggregationEngine>()
+                .AddSingleton<RadiocomDataArtistWorkEventAggregationEngine>()
                 .AddSingleton<IRadiocomArtistRepository, SqlRadiocomArtistRepository>()
+                .AddSingleton<IRadiocomArtistWorkRepository, SqlRadiocomArtistWorkRepository>()
                 .AddSingleton<IArtistTimeSeriesCache, TableStorageArtistTimeSeriesCache>(
                 x =>
                 {
                     string connectionString = x.GetService<IConfiguration>().GetValue<string>("TableStorageCacheConnectionString");
                     return new TableStorageArtistTimeSeriesCache(connectionString);
                 })
+                .AddSingleton<IArtistWorkTimeSeriesCache, TableStorageArtistWorkTimeSeriesCache>(
+                x =>
+                {
+                    string connectionString = x.GetService<IConfiguration>().GetValue<string>("TableStorageCacheConnectionString");
+                    return new TableStorageArtistWorkTimeSeriesCache(connectionString);
+                })
                 .AddSingleton<IArtistEventsRepository, SqlArtistEventRepository>()
+                .AddSingleton<IArtistWorkEventsRepository, SqlArtistWorkEventRepository>()
                 .AddSingleton<IDbConnectionFactory, SqlConnectionFactory>()
                 .AddSingleton<ITimeSeriesEngine, TimeSeriesEngine>();
 
@@ -70,11 +80,23 @@ namespace Czf.Radiocom.Aggregation.App
                 {
                     configuration.GetSection(SqlRadiocomArtistRepositoryOptions.SqlRadiocomRepository).Bind(settings);
                 });
+            
+            builder.Services
+                .AddOptions<SqlRadiocomArtistWorkRepositoryOptions>()
+                .Configure<IConfiguration>((settings, configuration) =>
+                {
+                    configuration.GetSection(SqlRadiocomArtistWorkRepositoryOptions.SqlRadiocomRepository).Bind(settings);
+                });
 
             builder.Services
                 .AddOptions<SqlArtistEventRepositoryOptions>()
                 .Configure<IConfiguration>((settings, configuration) => {
                     configuration.GetSection(SqlArtistEventRepositoryOptions.SqlRadiocomRepository).Bind(settings);
+                });
+            builder.Services
+                .AddOptions<SqlArtistWorkEventRepositoryOptions>()
+                .Configure<IConfiguration>((settings, configuration) => {
+                    configuration.GetSection(SqlArtistWorkEventRepositoryOptions.SqlRadiocomRepository).Bind(settings);
                 });
 
             builder.Services

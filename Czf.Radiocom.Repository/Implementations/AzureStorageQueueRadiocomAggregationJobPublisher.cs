@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Storage.Queues;
 using Czf.Radiocom.Repository.Contracts;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Czf.Radiocom.Repository.Implementations
@@ -14,7 +15,7 @@ namespace Czf.Radiocom.Repository.Implementations
         private readonly QueueClient _artistClient;
         private readonly QueueClient _artistWorkClient;
 
-        public AzureStorageQueueRadiocomAggregationJobPublisher(IOptions<AzureStorageQueueRadiocomAggregationJobPublisherOptions> options)
+        public AzureStorageQueueRadiocomAggregationJobPublisher(IOptions<AzureStorageQueueRadiocomAggregationJobPublisherOptions> options, ILogger<AzureStorageQueueRadiocomAggregationJobPublisher> logger)
         {
 
             if (options == null)
@@ -22,10 +23,17 @@ namespace Czf.Radiocom.Repository.Implementations
                 throw new ArgumentNullException("options is null");
             }
 
-            Uri queueUri = new Uri(options.Value.ArtistQueueUri);
-            _artistClient = new QueueClient(queueUri, new DefaultAzureCredential());
-            queueUri = new Uri(options.Value.ArtistWorkQueueUri);
-            _artistWorkClient = new QueueClient(queueUri, new DefaultAzureCredential());
+            if(options.Value.ArtistQueueUri == options.Value.ArtistWorkQueueUri)
+            {
+                throw new Exception("uris are the same");
+            }
+
+            logger.LogInformation($"ArtistQueueUri: {options.Value.ArtistQueueUri}");
+            Uri artistQueueUri = new Uri(options.Value.ArtistQueueUri);
+            _artistClient = new QueueClient(artistQueueUri, new DefaultAzureCredential());
+            Uri artistWorkQueueUri = new Uri(options.Value.ArtistWorkQueueUri);
+            logger.LogInformation($"ArtistWorkQueueUri: {options.Value.ArtistWorkQueueUri}");
+            _artistWorkClient = new QueueClient(artistWorkQueueUri, new DefaultAzureCredential());
         }
 
         

@@ -7,6 +7,7 @@ using Czf.Radiocom.Aggregation.Contracts;
 using Czf.Radiocom.Aggregation.Contracts.Values;
 using Czf.Radiocom.Aggregation.Entities;
 using Czf.Radiocom.Event.Repository.Contracts;
+using Czf.Radiocom.Repository.Contracts;
 
 namespace RadiocomDataAggregationEngine
 {
@@ -18,20 +19,19 @@ namespace RadiocomDataAggregationEngine
         public RadiocomDataArtistEventAggregationEngine(
             IArtistEventsRepository artistEventsRepository, 
             ITimeSeriesEngine timeSeriesEngine,
-            IArtistTimeSeriesCache artistTimeSeriesCache
-            )
+            IArtistTimeSeriesCache artistTimeSeriesCache)
         {
             _artistEventsRepository = artistEventsRepository;
             _timeSeriesEngine = timeSeriesEngine;
             _artistTimeSeriesCache = artistTimeSeriesCache;
         }
-        public Task ProcessArtist(int artistId)
+        
+        public async Task ProcessArtist(int artistId)
         {
-            Task sevenDaysTask = ProcessArtistForTimeSeriesAsync(TimeSeries.SevenDays, artistId);
-            Task threeMonthsTask = ProcessArtistForTimeSeriesAsync(TimeSeries.ThreeMonths, artistId);
-            Task oneYearTask = ProcessArtistForTimeSeriesAsync(TimeSeries.OneYear, artistId);
-
-            return Task.WhenAll(sevenDaysTask, threeMonthsTask, oneYearTask);
+            //Possible optimization if no results at large time series skip subsequent fetch and write 0 
+            await ProcessArtistForTimeSeriesAsync(TimeSeries.OneYear, artistId);//due to limited 30 requests to sql only run one at once.
+            await ProcessArtistForTimeSeriesAsync(TimeSeries.ThreeMonths, artistId);
+            await ProcessArtistForTimeSeriesAsync(TimeSeries.SevenDays, artistId);             
         }
 
         private async Task ProcessArtistForTimeSeriesAsync(TimeSeries timeSeries, int artistId)
@@ -39,7 +39,6 @@ namespace RadiocomDataAggregationEngine
             IEnumerable<ArtistEvent> events = await _artistEventsRepository.GetEventsForTimeSeriesAsync(timeSeries, artistId);
             IEnumerable<ITimeSeriesValue> timeSeriesEvents = _timeSeriesEngine.ProcessTimeSeries(events, timeSeries);
             await _artistTimeSeriesCache.StoreTimeSeriesValuesAsync(timeSeriesEvents, artistId, timeSeries);
-
         }
     }
 
