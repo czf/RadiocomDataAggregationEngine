@@ -1,0 +1,13 @@
+{
+	"bindings": [
+		{
+			"direction": "in",
+			"name": "request",
+			
+			"type": "httpTrigger",
+			
+			
+		}
+	]
+
+}
