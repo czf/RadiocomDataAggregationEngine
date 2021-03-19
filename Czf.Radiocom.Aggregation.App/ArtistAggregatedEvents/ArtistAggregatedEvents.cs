@@ -31,7 +31,6 @@ namespace Czf.Radiocom.Aggregation.App
 
         [FunctionName("ArtistAggregatedEvents")]
         public async Task<IActionResult> Run(
-            //[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, [FromQuery] int[] ids,
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]  HttpRequest req,
             ILogger log)
         {

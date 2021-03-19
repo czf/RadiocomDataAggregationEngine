@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Czf.Radiocom.Aggregation.Contracts\Czf.Radiocom.Aggregation.Contracts.csproj" />
     <ProjectReference Include="..\Czf.Radiocom.Shared.Contracts\Czf.Radiocom.Shared.csproj" />
   </ItemGroup>
 
