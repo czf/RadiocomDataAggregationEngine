@@ -39,11 +39,35 @@ namespace Czf.Radiocom.Aggregation.Cache
         public async Task StoreTimeSeriesValuesAsync(IEnumerable<ITimeSeriesValue> timeSeriesEvents, int artistId, TimeSeries timeSeries)
         {
             var entity =
-                new TimeSeriesValueEntity() { ArtistId = artistId, TimeSeries = timeSeries, TimeSeriesValues = timeSeriesEvents, TimeSeriesTotal = timeSeriesEvents.Sum(x=>x.Value) };
+                new TimeSeriesValueEntity() { ArtistId = artistId, TimeSeries = timeSeries, TimeSeriesValues = timeSeriesEvents, TimeSeriesTotal = timeSeriesEvents.Sum(x => x.Value) };
             var operation = TableOperation.InsertOrReplace(entity);
-            
+
             await _cacheTable.ExecuteAsync(operation);
         }
+        public async Task<IAggregatedEvent> FetchTimeSeriesAggregatedEventAsync(int artistId, TimeSeries timeSeries)
+        {
+            var operation = TableOperation.Retrieve<TimeSeriesValueEntity>(artistId.ToString(), timeSeries.ToString());
+            TimeSeriesValueEntity entity = (TimeSeriesValueEntity)( await _cacheTable.ExecuteAsync(operation)).Result;
+            AggregatedEvent aggregatedEvent = new AggregatedEvent()
+            {
+                AggregatedEventSum = entity.TimeSeriesTotal,
+                AggregationTimeSeries = entity.TimeSeries,
+                Id = entity.ArtistId,
+                AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
+            };
+            return aggregatedEvent;
+        }
+
+        public async Task<IEnumerable<IAggregatedEvent>> FetchTimeSeriesAggregatedEventsAsync(IEnumerable<int> artistIds, TimeSeries timeSeries)
+        {
+            List<IAggregatedEvent> events = new List<IAggregatedEvent>();
+            foreach (var id in artistIds)
+            {
+                events.Add(await FetchTimeSeriesAggregatedEventAsync(id, timeSeries));
+            }
+            return events;
+        }
+
 
         private class TimeSeriesValueEntity : ITableEntity
         {

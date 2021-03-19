@@ -13,6 +13,7 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RadiocomDataAggregationEngine;
+using RadiocomDataAggregationEngine.Artist;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistEventRepository;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistWorkEventRepository;
 using static Czf.Radiocom.Repository.Implementations.AzureStorageQueueRadiocomAggregationJobPublisher;
@@ -30,6 +31,7 @@ namespace Czf.Radiocom.Aggregation.App
         {
             builder.Services //.AddLogging()
                 .AddOptions()
+                .AddSingleton<ArtistAggregatedEventRequestEngine>()
                 .AddSingleton<RadiocomCompletedCollectorInitiateJobsEngine>()
                 .AddSingleton<RadiocomDataArtistEventAggregationEngine>()
                 .AddSingleton<RadiocomDataArtistWorkEventAggregationEngine>()

@@ -7,11 +7,13 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using NUnit.Framework;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistEventRepository;
-using static Czf.Radiocom.Event.Repository.Implementations.SqlConnectionFactory;
+
 using Czf.Radiocom.Aggregation.Cache;
 using System.Threading.Tasks;
 using Czf.Radiocom.Aggregation.Contracts;
 using System.Collections.Generic;
+using static Czf.Radiocom.Shared.Implementations.SqlConnectionFactory;
+using Czf.Radiocom.Shared.Implementations;
 
 namespace Czf.Radiocom.Tests
 {

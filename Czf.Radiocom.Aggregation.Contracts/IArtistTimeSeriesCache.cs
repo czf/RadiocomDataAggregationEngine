@@ -9,5 +9,7 @@ namespace Czf.Radiocom.Aggregation.Contracts
     {
         Task StoreTimeSeriesValuesAsync(IEnumerable<ITimeSeriesValue> timeSeriesEvents, int artistId, TimeSeries timeSeries);
         Task<IEnumerable<ITimeSeriesValue>> FetchTimeSeriesValuesAsync(int artistId, TimeSeries timeSeries);
+        Task<IAggregatedEvent> FetchTimeSeriesAggregatedEventAsync(int artistId, TimeSeries timeSeries);
+        Task<IEnumerable<IAggregatedEvent>> FetchTimeSeriesAggregatedEventsAsync(IEnumerable<int> artistId, TimeSeries timeSeries);
     }
 }
