@@ -30,11 +30,12 @@ namespace Czf.Radiocom.Event.Repository.Implementations
             dynamicParameters.Add("StartBound", timeRange.start, DbType.DateTime);
             dynamicParameters.Add("EndBound", timeRange.end, DbType.DateTime);//not inclusive
             dynamicParameters.Add("ArtistId", artistId);
-            IEnumerable<ArtistEvent> result = await conn.QueryAsync<ArtistEvent>(
+            IEnumerable<ArtistEvent> result = conn.Query<ArtistEvent>(
 @"SELECT awso.StartTime AS 'TimeStamp' 
   FROM dbo.ArtistWorkStationOccurrence awso
   INNER JOIN dbo.ArtistWork aw ON aw.Id = awso.ArtistWorkId
-WHERE StartTime BETWEEN @StartBound AND @EndBound AND aw.ArtistId = @ArtistId", dynamicParameters);
+WHERE StartTime BETWEEN @StartBound AND @EndBound AND aw.ArtistId = @ArtistId
+OPTION (MAXDOP 1);", dynamicParameters);
             return result;
         }
             
