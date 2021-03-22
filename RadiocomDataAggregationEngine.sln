@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Aggregation.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Repository", "Czf.Radiocom.Repository\Czf.Radiocom.Repository.csproj", "{0CE874CE-09DB-4957-A0A3-29B09DF72D18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Czf.Radiocom.Shared", "Czf.Radiocom.Shared.Contracts\Czf.Radiocom.Shared.csproj", "{BE111F3F-5AE9-4908-ABDE-43E627CCEEB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Czf.Radiocom.Shared", "Czf.Radiocom.Shared.Contracts\Czf.Radiocom.Shared.csproj", "{BE111F3F-5AE9-4908-ABDE-43E627CCEEB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

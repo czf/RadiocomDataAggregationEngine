@@ -13,7 +13,8 @@ namespace RadiocomDataAggregationEngine.Artist
         private readonly ILogger<ArtistAggregatedEventRequestEngine> _logger;
         private readonly IArtistTimeSeriesCache _artistTimeSeriesCache;
 
-        public ArtistAggregatedEventRequestEngine(ILogger<ArtistAggregatedEventRequestEngine> logger, IArtistTimeSeriesCache artistTimeSeriesCache)
+        public ArtistAggregatedEventRequestEngine(ILogger<ArtistAggregatedEventRequestEngine> logger, 
+            IArtistTimeSeriesCache artistTimeSeriesCache)
         {
             _logger = logger;
             _artistTimeSeriesCache = artistTimeSeriesCache;

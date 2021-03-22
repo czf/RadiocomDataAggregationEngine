@@ -22,10 +22,7 @@ namespace Czf.Radiocom.Aggregation.App.ArtistInfos
             public IEnumerable<int> ArtistIds { get; set; }
         }
 
-        public class ArtistInfoResponse
-        {
-            public Dictionary<int, string> Artists { get; set; }
-        }
+    
 
         public ArtistInfos(ArtistInfoRequestEngine artistInfosRequestEngine) 
         {
@@ -39,8 +36,6 @@ namespace Czf.Radiocom.Aggregation.App.ArtistInfos
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-
-           
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             ArtistInfosRequest data = JsonConvert.DeserializeObject<ArtistInfosRequest>(requestBody);

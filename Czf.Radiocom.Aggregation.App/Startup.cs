@@ -15,11 +15,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RadiocomDataAggregationEngine;
 using RadiocomDataAggregationEngine.Artist;
+using RadiocomDataAggregationEngine.ArtistWork;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistEventRepository;
 using static Czf.Radiocom.Event.Repository.Implementations.SqlArtistWorkEventRepository;
 using static Czf.Radiocom.Repository.Implementations.AzureStorageQueueRadiocomAggregationJobPublisher;
 using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistInfoRepository;
 using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistRepository;
+using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistWorkInfoRepository;
 using static Czf.Radiocom.Repository.Implementations.SqlRadiocomArtistWorkRepository;
 using static Czf.Radiocom.Shared.Implementations.SqlConnectionFactory;
 //using Microsoft.Extensions.DependencyInjection; //microsoft.extensions.http
@@ -38,21 +40,36 @@ namespace Czf.Radiocom.Aggregation.App
                 .AddSingleton<RadiocomCompletedCollectorInitiateJobsEngine>()
                 .AddSingleton<RadiocomDataArtistEventAggregationEngine>()
                 .AddSingleton<RadiocomDataArtistWorkEventAggregationEngine>()
+                .AddSingleton<Artist_TopArtistWorkAggregatedEventsRequestEngine>()
                 .AddSingleton<IRadiocomArtistRepository, SqlRadiocomArtistRepository>()
                 .AddSingleton<IRadiocomArtistWorkRepository, SqlRadiocomArtistWorkRepository>()
                 .AddSingleton<IRadiocomArtistInfoRepository, SqlRadiocomArtistInfoRepository>()
+                .AddSingleton<IRadiocomArtistWorkInfoRepository, SqlRadiocomArtistWorkInfoRepository>()
                 .AddSingleton<DualLayerRadiocomArtistInfoRepository>()
+                .AddSingleton<DualLayerRadiocomArtistWorkInfoRepository>()
                 .AddSingleton(
                 x =>
                 {
                     DualLayerRadiocomArtistInfoRepository dualLayerRadiocomArtistInfoRepository =  x.GetService<DualLayerRadiocomArtistInfoRepository>();
                     return new ArtistInfoRequestEngine(dualLayerRadiocomArtistInfoRepository);
                 })
+                .AddSingleton(
+                x =>
+                {
+                    DualLayerRadiocomArtistWorkInfoRepository dualLayerRadiocomArtistWorkInfoRepository = x.GetService<DualLayerRadiocomArtistWorkInfoRepository>();
+                    return new ArtistWorkInfoRequestEngine(dualLayerRadiocomArtistWorkInfoRepository);
+                })
                 .AddSingleton<IArtistInfoCache, TableStorageArtistInfoCache>(
                 x =>
                 {
                     string connectionString = x.GetService<IConfiguration>().GetValue<string>("TableStorageCacheConnectionString");
                     return new TableStorageArtistInfoCache(connectionString);
+                })
+                .AddSingleton<IArtistWorkInfoCache, TableStorageArtistWorkInfoCache>(
+                x =>
+                {
+                    string connectionString = x.GetService<IConfiguration>().GetValue<string>("TableStorageCacheConnectionString");
+                    return new TableStorageArtistWorkInfoCache(connectionString);
                 })
                 .AddSingleton<IArtistTimeSeriesCache, TableStorageArtistTimeSeriesCache>(
                 x =>
@@ -130,6 +147,12 @@ namespace Czf.Radiocom.Aggregation.App
                 {
                     configuration.GetSection(SqlRadiocomArtistInfoRepositoryOptions.SqlRadiocomRepository).Bind(settings);
                 });
+            builder.Services
+               .AddOptions<SqlRadiocomArtistWorkInfoRepositoryOptions>()
+               .Configure<IConfiguration>((settings, configuration) =>
+               {
+                   configuration.GetSection(SqlRadiocomArtistWorkInfoRepositoryOptions.SqlRadiocomRepository).Bind(settings);
+               });
         }
     }
 }

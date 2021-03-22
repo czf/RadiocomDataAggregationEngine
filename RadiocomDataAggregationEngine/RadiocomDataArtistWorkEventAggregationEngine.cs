@@ -16,14 +16,18 @@ namespace RadiocomDataAggregationEngine
         private readonly IArtistWorkEventsRepository _ArtistWorkEventsRepository;
         private readonly ITimeSeriesEngine _timeSeriesEngine;
         private readonly IArtistWorkTimeSeriesCache _ArtistWorkTimeSeriesCache;
+        private readonly IRadiocomArtistWorkRepository _radiocomArtistWorkRepository;
+
         public RadiocomDataArtistWorkEventAggregationEngine(
             IArtistWorkEventsRepository ArtistWorkEventsRepository, 
             ITimeSeriesEngine timeSeriesEngine,
-            IArtistWorkTimeSeriesCache ArtistWorkTimeSeriesCache)
+            IArtistWorkTimeSeriesCache ArtistWorkTimeSeriesCache,
+            IRadiocomArtistWorkRepository radiocomArtistWorkRepository)
         {
             _ArtistWorkEventsRepository = ArtistWorkEventsRepository;
             _timeSeriesEngine = timeSeriesEngine;
             _ArtistWorkTimeSeriesCache = ArtistWorkTimeSeriesCache;
+            _radiocomArtistWorkRepository = radiocomArtistWorkRepository;
         }
         public async Task ProcessArtistWork(int ArtistWorkId)
         {
@@ -35,9 +39,10 @@ namespace RadiocomDataAggregationEngine
 
         private async Task ProcessArtistWorkForTimeSeriesAsync(TimeSeries timeSeries, int ArtistWorkId)
         {
+            int artistId = await _radiocomArtistWorkRepository.GetArtistIdForArtistWork(ArtistWorkId);
             IEnumerable<ArtistWorkEvent> events = await _ArtistWorkEventsRepository.GetEventsForTimeSeriesAsync(timeSeries, ArtistWorkId);
             IEnumerable<ITimeSeriesValue> timeSeriesEvents = _timeSeriesEngine.ProcessTimeSeries(events, timeSeries);
-            await _ArtistWorkTimeSeriesCache.StoreTimeSeriesValuesAsync(timeSeriesEvents, ArtistWorkId, timeSeries);
+            await _ArtistWorkTimeSeriesCache.StoreTimeSeriesValuesAsync(timeSeriesEvents, ArtistWorkId, timeSeries, artistId);
         }
     }
 

@@ -18,7 +18,7 @@ namespace Czf.Radiocom.Aggregation.App
     {
         private readonly ArtistAggregatedEventRequestEngine _artistAggregatedEventRequestEngine;
 
-        public class ArtistAggregatedEventsRequest : IArtistAggregatedEventsRequest
+        private class ArtistAggregatedEventsRequest : IArtistAggregatedEventsRequest
         {
             public IEnumerable<int> ArtistIds { get; set; }
             public TimeSeries TimeSeries { get; set; }
@@ -35,8 +35,6 @@ namespace Czf.Radiocom.Aggregation.App
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-
-            //string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var data = JsonConvert.DeserializeObject<ArtistAggregatedEventsRequest>(requestBody);

@@ -6,6 +6,5 @@ namespace Czf.Radiocom.Aggregation.Entities
     public class ArtistWorkEvent : ITimeSeriesEvent
     {
         public DateTimeOffset TimeStamp { get; set; }
-
     }
 }

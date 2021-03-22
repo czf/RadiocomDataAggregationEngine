@@ -23,6 +23,61 @@ namespace Czf.Radiocom.Aggregation.Cache
             _cacheTable.CreateIfNotExists();
         }
 
+        public IEnumerable<IAggregatedEvent> FetchArtistArtistWorkAggregatedEvents(int artistId, TimeSeries timeSeries)
+        {
+            //artistId == TimeSeriesValueEntity.ArtistId && timeSeries == TimeSeriesValueEntity.TimeSeries
+            var query = new TableQuery<TimeSeriesValueEntity>().Where(
+                TableQuery.CombineFilters(
+                    TableQuery.GenerateFilterConditionForInt(
+                        nameof(TimeSeriesValueEntity.ArtistId),
+                        QueryComparisons.Equal,
+                        artistId),
+                    TableOperators.And,
+                    TableQuery.GenerateFilterCondition(
+                        nameof(TimeSeriesValueEntity.TimeSeries),
+                        QueryComparisons.Equal,
+                        timeSeries.ToString())));
+
+            IEnumerable<TimeSeriesValueEntity> timeSeriesValueEntities =
+                _cacheTable.ExecuteQuery(query);
+
+            List<AggregatedEvent> aggregatedEvents = new List<AggregatedEvent>();
+            foreach (var entity in timeSeriesValueEntities)
+            {
+                AggregatedEvent aggregatedEvent = new AggregatedEvent()
+                {
+                    AggregatedEventSum = entity.TimeSeriesTotal,
+                    AggregationTimeSeries = entity.TimeSeries,
+                    Id = entity.ArtistId,
+                    AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
+                };
+                aggregatedEvents.Add(aggregatedEvent);
+            }
+            return aggregatedEvents;
+        }
+
+        public async Task<IEnumerable<IAggregatedEvent>> FetchTimeSeriesAggregatedEventsAsync(IEnumerable<int> artistWorkIds, TimeSeries timeSeries)
+        {
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            foreach (int id in artistWorkIds)
+            {
+                batchOperation.Retrieve<TimeSeriesValueEntity>(id.ToString(), timeSeries.ToString());
+            }
+            TableBatchResult result = await _cacheTable.ExecuteBatchAsync(batchOperation);
+            return result.Select(x =>
+            {
+                TimeSeriesValueEntity entity = (TimeSeriesValueEntity)x.Result;
+                return new AggregatedEvent()
+                {
+                    AggregatedEventSum = entity.TimeSeriesTotal,
+                    AggregationTimeSeries = entity.TimeSeries,
+                    Id = entity.ArtistId,
+                    AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
+                };
+            });
+             
+        }
+
         public async Task<IEnumerable<ITimeSeriesValue>> FetchTimeSeriesValuesAsync(int ArtistWorkId, TimeSeries timeSeries)
         {
             var operation = TableOperation.Retrieve<TimeSeriesValueEntity>(ArtistWorkId.ToString(), timeSeries.ToString());
@@ -36,10 +91,10 @@ namespace Czf.Radiocom.Aggregation.Cache
             return seriesValues;
         }
 
-        public async Task StoreTimeSeriesValuesAsync(IEnumerable<ITimeSeriesValue> timeSeriesEvents, int ArtistWorkId, TimeSeries timeSeries)
+        public async Task StoreTimeSeriesValuesAsync(IEnumerable<ITimeSeriesValue> timeSeriesEvents, int ArtistWorkId, TimeSeries timeSeries, int artistId)
         {
             var entity =
-                new TimeSeriesValueEntity() { ArtistWorkId = ArtistWorkId, TimeSeries = timeSeries, TimeSeriesValues = timeSeriesEvents, TimeSeriesTotal = timeSeriesEvents.Sum(x=>x.Value) };
+                new TimeSeriesValueEntity() { ArtistWorkId = ArtistWorkId, ArtistId= artistId, TimeSeries = timeSeries, TimeSeriesValues = timeSeriesEvents, TimeSeriesTotal = timeSeriesEvents.Sum(x=>x.Value) };
             var operation = TableOperation.InsertOrReplace(entity);
             
             await _cacheTable.ExecuteAsync(operation);
@@ -47,14 +102,14 @@ namespace Czf.Radiocom.Aggregation.Cache
 
         private class TimeSeriesValueEntity : ITableEntity
         {
-            private int _ArtistWorkId;
+            private int _artistWorkId;
             private TimeSeries _timeSeries;
             public int ArtistWorkId
             {
-                get => _ArtistWorkId;
+                get => _artistWorkId;
                 set
                 {
-                    _ArtistWorkId = value;
+                    _artistWorkId = value;
                 }
             }
             
@@ -67,16 +122,18 @@ namespace Czf.Radiocom.Aggregation.Cache
                     RowKey = value.ToString();
                 }
             }
+            public int ArtistId { get; set; }
             public long TimeSeriesTotal { get; set; }
             public IEnumerable<ITimeSeriesValue> TimeSeriesValues { get; set; }
 
-            public string PartitionKey { get => _ArtistWorkId.ToString(); set => _ArtistWorkId = int.Parse(value); }
+            public string PartitionKey { get => _artistWorkId.ToString(); set => _artistWorkId = int.Parse(value); }
             public string RowKey { get => _timeSeries.ToString(); set => _timeSeries = Enum.Parse<TimeSeries>(value); }
             public DateTimeOffset Timestamp { get; set; }
             public string ETag { get; set; }
 
             public void ReadEntity(IDictionary<string, EntityProperty> properties, OperationContext operationContext)
             {
+                ArtistId = properties[nameof(ArtistId)].Int32Value.Value;
                 ArtistWorkId = properties[nameof(ArtistWorkId)].Int32Value.Value;
                 TimeSeries = Enum.Parse<TimeSeries>(properties[nameof(TimeSeries)].StringValue);
                 TimeSeriesValues = JsonConvert.DeserializeObject<List<TimeSeriesValue>>(properties[nameof(TimeSeriesValues)].StringValue);
@@ -91,7 +148,7 @@ namespace Czf.Radiocom.Aggregation.Cache
                 result[nameof(TimeSeries)] = new EntityProperty( TimeSeries.ToString());
                 result[nameof(TimeSeriesValues)] = EntityProperty.GeneratePropertyForString(JsonConvert.SerializeObject(TimeSeriesValues));
                 result[nameof(TimeSeriesTotal)] = EntityProperty.GeneratePropertyForLong(TimeSeriesTotal);
-
+                result[nameof(ArtistId)] = new EntityProperty(ArtistId);
                 return result;
             }
         }
