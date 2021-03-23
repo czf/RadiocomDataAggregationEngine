@@ -61,11 +61,41 @@ namespace Czf.Radiocom.Aggregation.Cache
         public async Task<IEnumerable<IAggregatedEvent>> FetchTimeSeriesAggregatedEventsAsync(IEnumerable<int> artistIds, TimeSeries timeSeries)
         {
             List<IAggregatedEvent> events = new List<IAggregatedEvent>();
-            foreach (var id in artistIds)
+            if (artistIds.Any())
             {
-                events.Add(await FetchTimeSeriesAggregatedEventAsync(id, timeSeries));
+                foreach (var id in artistIds)
+                {
+                    events.Add(await FetchTimeSeriesAggregatedEventAsync(id, timeSeries));
+                }
+            }
+            else
+            {
+                events.AddRange(FetchAllTimeSeriesAggregatedEvents(timeSeries));
             }
             return events;
+        }
+        private IEnumerable<IAggregatedEvent> FetchAllTimeSeriesAggregatedEvents(TimeSeries timeSeries)
+        {
+            List<AggregatedEvent> result = new List<AggregatedEvent>();
+            var query = new TableQuery<TimeSeriesValueEntity>().Where(
+                TableQuery.GenerateFilterCondition(
+                    nameof(TimeSeriesValueEntity.RowKey),
+                    QueryComparisons.Equal,
+                    timeSeries.ToString())
+                );
+            IEnumerable<TimeSeriesValueEntity> entities = _cacheTable.ExecuteQuery(query);
+            foreach (var entity in entities)
+            {
+                AggregatedEvent aggregatedEvent = new AggregatedEvent()
+                {
+                    AggregatedEventSum = entity.TimeSeriesTotal,
+                    AggregationTimeSeries = entity.TimeSeries,
+                    Id = entity.ArtistId,
+                    AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
+                };
+                result.Add(aggregatedEvent);
+            }
+            return result;
         }
 
 

@@ -22,14 +22,18 @@ namespace Czf.Radiocom.Aggregation.Cache
             _cacheTable.CreateIfNotExists();
         }
 
-        public Task StoreArtistInfosAsync(IEnumerable<IArtistInfo> artistInfos)
+        public async Task StoreArtistInfosAsync(IEnumerable<IArtistInfo> artistInfos)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
-            foreach (var entity in artistInfos.Select(x=> new ArtistInfoEntity(x)))
+            foreach (var entityBatch in artistInfos.Select(x=> new ArtistInfoEntity(x)).Batch(50))
             {
-                batchOperation.InsertOrReplace(entity);
+                foreach(var entity in entityBatch)
+                {
+                    batchOperation.InsertOrReplace(entity);
+                }
+                await _cacheTable.ExecuteBatchAsync(batchOperation);
+                batchOperation.Clear();
             }
-            return _cacheTable.ExecuteBatchAsync(batchOperation);
         }
 
         public bool TryGetArtistInfo(int artistId, out IArtistInfo artistInfo)
