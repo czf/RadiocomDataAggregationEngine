@@ -4,5 +4,10 @@
         <name>RadiocomDataAggregationEngine</name>
     </assembly>
     <members>
+        <member name="T:RadiocomDataAggregationEngine.Artist.Artist_TopArtistWorkAggregatedEventsRequestEngine">
+            <summary>
+            Used to find the top ArtistWorkAggregatedEvents for a given artist
+            </summary>
+        </member>
     </members>
 </doc>

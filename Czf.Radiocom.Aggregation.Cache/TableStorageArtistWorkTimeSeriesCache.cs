@@ -48,7 +48,7 @@ namespace Czf.Radiocom.Aggregation.Cache
                 {
                     AggregatedEventSum = entity.TimeSeriesTotal,
                     AggregationTimeSeries = entity.TimeSeries,
-                    Id = entity.ArtistId,
+                    Id = entity.ArtistWorkId,
                     AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
                 };
                 aggregatedEvents.Add(aggregatedEvent);

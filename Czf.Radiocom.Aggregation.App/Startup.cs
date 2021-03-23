@@ -40,6 +40,7 @@ namespace Czf.Radiocom.Aggregation.App
                 .AddSingleton<RadiocomCompletedCollectorInitiateJobsEngine>()
                 .AddSingleton<RadiocomDataArtistEventAggregationEngine>()
                 .AddSingleton<RadiocomDataArtistWorkEventAggregationEngine>()
+                .AddSingleton<ArtistWorkAggregatedEventRequestEngine>()
                 .AddSingleton<Artist_TopArtistWorkAggregatedEventsRequestEngine>()
                 .AddSingleton<IRadiocomArtistRepository, SqlRadiocomArtistRepository>()
                 .AddSingleton<IRadiocomArtistWorkRepository, SqlRadiocomArtistWorkRepository>()

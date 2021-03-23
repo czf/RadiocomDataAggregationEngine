@@ -24,7 +24,7 @@ namespace Czf.Radiocom.Repository.Implementations
         public async Task<int> GetArtistIdForArtistWork(int artistWorkId)
         {
             using IDbConnection conn = await _dbConnectionFactory.GetConnection(_sqlRadiocomArtistWorkRepositoryOptions.ConnectionString);
-            return await conn.ExecuteScalarAsync<int>("SELECT ArtistWork.Id FROM dbo.ArtistWork;");
+            return await conn.ExecuteScalarAsync<int>("SELECT ArtistWork.ArtistId FROM dbo.ArtistWork WHERE ArtistWork.Id = @Id;", new { Id = artistWorkId});
 
         }
 
