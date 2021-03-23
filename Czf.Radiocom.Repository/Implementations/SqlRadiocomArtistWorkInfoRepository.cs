@@ -29,9 +29,9 @@ namespace Czf.Radiocom.Repository.Implementations
             foreach (int id in ids)
             {
                 DynamicParameters dynamicParameters = new DynamicParameters();
-                dynamicParameters.Add("ArtistId", id, DbType.Int32);
+                dynamicParameters.Add("ArtistWorkId", id, DbType.Int32);
                 ArtistWorkInfo ArtistWorkInfo =
-                    conn.QuerySingleOrDefault<ArtistWorkInfo>("SELECT * FROM dbo.ArtistWork WHERE Id = @ArtistId;", dynamicParameters);
+                    conn.QuerySingleOrDefault<ArtistWorkInfo>("SELECT * FROM dbo.ArtistWork WHERE Id = @ArtistWorkId;", dynamicParameters);
                 if(ArtistWorkInfo != null)
                 {
                     result.Add(ArtistWorkInfo);

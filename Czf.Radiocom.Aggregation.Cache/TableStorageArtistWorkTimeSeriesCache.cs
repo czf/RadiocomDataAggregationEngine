@@ -58,29 +58,49 @@ namespace Czf.Radiocom.Aggregation.Cache
 
         public async Task<IEnumerable<IAggregatedEvent>> FetchTimeSeriesAggregatedEventsAsync(IEnumerable<int> artistWorkIds, TimeSeries timeSeries)
         {
-            TableBatchOperation batchOperation = new TableBatchOperation();
-            foreach (int id in artistWorkIds)
+            List<TimeSeriesValueEntity> entities = new List<TimeSeriesValueEntity>();
+            if (!artistWorkIds.Any())
             {
-                batchOperation.Retrieve<TimeSeriesValueEntity>(id.ToString(), timeSeries.ToString());
+                var query = new TableQuery<TimeSeriesValueEntity>().Where(
+                    TableQuery.GenerateFilterCondition(
+                        nameof(TimeSeriesValueEntity.TimeSeries),
+                        QueryComparisons.Equal,
+                        timeSeries.ToString())
+                    );
+                entities = _cacheTable.ExecuteQuery(query).ToList();
             }
-            TableBatchResult result = await _cacheTable.ExecuteBatchAsync(batchOperation);
-            return result.Select(x =>
+            else
             {
-                TimeSeriesValueEntity entity = (TimeSeriesValueEntity)x.Result;
+                TableBatchOperation batchOperation = new TableBatchOperation();
+                foreach (var idBatch in artistWorkIds.Batch(50))
+                {
+                    foreach(var id in idBatch)
+                    {
+                        batchOperation.Retrieve<TimeSeriesValueEntity>(id.ToString(), timeSeries.ToString());
+                    }
+                    TableBatchResult batchResult = await _cacheTable.ExecuteBatchAsync(batchOperation);
+                    entities.AddRange(batchResult.Select(x => (TimeSeriesValueEntity)x.Result));
+                    
+                    batchOperation.Clear();
+                }
+               
+            }
+            return entities.Select(entity =>
+            {
+                
                 return new AggregatedEvent()
                 {
                     AggregatedEventSum = entity.TimeSeriesTotal,
                     AggregationTimeSeries = entity.TimeSeries,
-                    Id = entity.ArtistId,
+                    Id = entity.ArtistWorkId,
                     AggregatedEventSumSource = entity.TimeSeriesValues.Select(x => new AggregatedEventSource() { Timestamp = x.Timestamp, Value = x.Value })
                 };
             });
-             
         }
 
-        public async Task<IEnumerable<ITimeSeriesValue>> FetchTimeSeriesValuesAsync(int ArtistWorkId, TimeSeries timeSeries)
+        public async Task<IEnumerable<ITimeSeriesValue>> FetchTimeSeriesValuesAsync(int artistWorkId, TimeSeries timeSeries)
         {
-            var operation = TableOperation.Retrieve<TimeSeriesValueEntity>(ArtistWorkId.ToString(), timeSeries.ToString());
+            var operation = TableOperation.Retrieve<TimeSeriesValueEntity>(artistWorkId.ToString(), timeSeries.ToString());
             var execResult = await _cacheTable.ExecuteAsync(operation);
             TimeSeriesValueEntity entityResult = (TimeSeriesValueEntity)execResult.Result;
             List<TimeSeriesValue> seriesValues = new List<TimeSeriesValue>();

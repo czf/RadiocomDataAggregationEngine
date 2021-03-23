@@ -22,14 +22,19 @@ namespace Czf.Radiocom.Aggregation.Cache
             _cacheTable.CreateIfNotExists();
         }
 
-        public Task StoreArtistWorkInfosAsync(IEnumerable<IArtistWorkInfo> ArtistWorkInfos)
+        public async Task StoreArtistWorkInfosAsync(IEnumerable<IArtistWorkInfo> ArtistWorkInfos)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
-            foreach (var entity in ArtistWorkInfos.Select(x=> new ArtistWorkInfoEntity(x)))
+            foreach (var entityBatch in ArtistWorkInfos.Select(x=> new ArtistWorkInfoEntity(x)).Batch(50))
             {
-                batchOperation.InsertOrReplace(entity);
+                foreach (var entity in entityBatch)
+                {
+                    batchOperation.InsertOrReplace(entity);
+                }
+                await _cacheTable.ExecuteBatchAsync(batchOperation);
+                batchOperation.Clear();
             }
-            return _cacheTable.ExecuteBatchAsync(batchOperation);
+            
         }
 
         public bool TryGetArtistWorkInfo(int artistWorkId, out IArtistWorkInfo ArtistWorkInfo)
@@ -54,6 +59,7 @@ namespace Czf.Radiocom.Aggregation.Cache
             {
                 Id = info.Id;
                 Title = info.Title;
+                ArtistId = info.ArtistId;
                 PartitionKey = "KISW";
             }
 
@@ -77,6 +83,7 @@ namespace Czf.Radiocom.Aggregation.Cache
             {
                 Id = properties[nameof(Id)].Int32Value.Value;
                 Title = properties[nameof(Title)].StringValue;
+                ArtistId = properties[nameof(ArtistId)].Int32Value.Value;
             }
 
             public IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
@@ -84,6 +91,8 @@ namespace Czf.Radiocom.Aggregation.Cache
                 Dictionary<string, EntityProperty> result = new Dictionary<string, EntityProperty>();
                 result[nameof(Id)] = EntityProperty.GeneratePropertyForInt(Id);
                 result[nameof(Title)] = EntityProperty.GeneratePropertyForString(Title);
+                result[nameof(ArtistId)] = EntityProperty.GeneratePropertyForInt(ArtistId);
+
                 return result;
             }
         }
