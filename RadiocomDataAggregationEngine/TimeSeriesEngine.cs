@@ -26,7 +26,7 @@ namespace RadiocomDataAggregationEngine
                     result = x => new DateTime(x.TimeStamp.Year, x.TimeStamp.Month, x.TimeStamp.Day);
                     break;
                 case TimeSeries.ThreeMonths:
-                    result = x => new DateTime(x.TimeStamp.Year, x.TimeStamp.Month, x.TimeStamp.Day).AddDays(-1 * x.TimeStamp.Day);
+                    result = x => new DateTime(x.TimeStamp.Year, x.TimeStamp.Month, x.TimeStamp.Day).AddDays(-1 * (int)x.TimeStamp.DayOfWeek);
                     break;
                 case TimeSeries.OneYear:
                     result = x => new DateTime(x.TimeStamp.Year, x.TimeStamp.Month, 1);
