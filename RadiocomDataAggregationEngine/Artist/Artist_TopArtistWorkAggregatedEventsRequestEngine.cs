@@ -26,7 +26,7 @@ namespace RadiocomDataAggregationEngine.Artist
         public IEnumerable<IAggregatedEvent> GetTopNArtistWorkAggregatedEvents(IArtist_TopArtistWorkAggregatedEventsRequest request)
         {
             var events = _artistWorkTimeSeriesCache.FetchArtistArtistWorkAggregatedEvents(request.ArtistId, request.TimeSeries);
-            return events.OrderBy(x => x.AggregatedEventSum).Take(request.TopN);
+            return events.OrderByDescending(x => x.AggregatedEventSum).Take(request.TopN);
         }
     }
 }
