@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Czf.Radiocom.Aggregation.Cache;
@@ -51,7 +51,7 @@ namespace Czf.Radiocom.Aggregation.App
                 .AddSingleton(
                 x =>
                 {
-                    DualLayerRadiocomArtistInfoRepository dualLayerRadiocomArtistInfoRepository =  x.GetService<DualLayerRadiocomArtistInfoRepository>();
+                    DualLayerRadiocomArtistInfoRepository dualLayerRadiocomArtistInfoRepository = x.GetService<DualLayerRadiocomArtistInfoRepository>();
                     return new ArtistInfoRequestEngine(dualLayerRadiocomArtistInfoRepository);
                 })
                 .AddSingleton(
@@ -100,8 +100,8 @@ namespace Czf.Radiocom.Aggregation.App
                 //.AddOptions<LocalStorageQueueRadiocomAggregationJobPublisherOptions>()
                 //.Configure<IConfiguration>((settings, configuration) => configuration.GetSection(LocalStorageQueueRadiocomAggregationJobPublisherOptions.LocalStorageQueueRadiocomAggregationJobPublisher).Bind(settings));
             }
-            else 
-            { 
+            else
+            {
                 builder.Services
                    .AddSingleton<IRadiocomAggregationJobPublisher, AzureStorageQueueRadiocomAggregationJobPublisher>();
 
@@ -117,7 +117,7 @@ namespace Czf.Radiocom.Aggregation.App
                 {
                     configuration.GetSection(SqlRadiocomArtistRepositoryOptions.SqlRadiocomRepository).Bind(settings);
                 });
-            
+
             builder.Services
                 .AddOptions<SqlRadiocomArtistWorkRepositoryOptions>()
                 .Configure<IConfiguration>((settings, configuration) =>

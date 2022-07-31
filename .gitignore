@@ -341,3 +341,4 @@ healthchecksdb
 /Czf.Database.Radiocom/SqlSchemaCompare.scmp
 /Czf.App.RadiocomDataCollector/Properties/serviceDependencies.czf-radiocom-datacollector - Zip Deploy.json
 *.local.json
+/Czf.Radiocom.Aggregation.App/local.settings.json
